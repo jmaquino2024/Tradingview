@@ -1,0 +1,136 @@
+{
+  "config": {
+    "configFile": "C:\\Users\\johnm\\pyth-playwright-project\\playwright.config.js",
+    "rootDir": "C:/Users/johnm/pyth-playwright-project/tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 15000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/Users/johnm/pyth-playwright-project/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/johnm/pyth-playwright-project/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "version": "1.47.0",
+    "workers": 6,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "Semifinaltrading.spec.js",
+      "file": "Semifinaltrading.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Automated TradingView Login and Interaction with CAPTCHA Handling and Screenshot Capture",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "status": "passed",
+                  "duration": 34023,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Blocked: https://ad.doubleclick.net/ddm/activity/src=13919399;type=wcount;cat=visit;u27=;u28=undefined;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;tfua=;npa=;ord=953.8733702032915?\n"
+                    },
+                    {
+                      "text": "Blocked: https://stats.g.doubleclick.net/g/collect?v=2&tid=G-YVVRYGL0E0&cid=1657308114.1727349236&gtm=45je49n0v9104254764za200&aip=1&dma=0&gcs=G1-0&gcd=13l3p3l3l5l1&npa=0&frm=0&tag_exp=101671035~101747727\n"
+                    },
+                    {
+                      "text": "Blocked: https://td.doubleclick.net/td/ga/rul?tid=G-YVVRYGL0E0&gacid=1657308114.1727349236&gtm=45je49n0v9104254764za200&dma=0&gcs=G1-0&gcd=13l3p3l3l5l1&npa=0&pscdl=noapi&aip=1&fledge=1&frm=0&tag_exp=101671035~101747727&z=1607039602\n"
+                    },
+                    {
+                      "text": "Blocked: https://stats.g.doubleclick.net/g/collect?v=2&tid=G-YVVRYGL0E0&cid=1657308114.1727349236&gtm=45je49n0v9104254764za200&aip=1&dma=0&gcs=G1-1&gcd=13l3r3l3l5l1&npa=0&frm=0&tag_exp=101671035~101747727\n"
+                    },
+                    {
+                      "text": "Clicked the CAPTCHA checkbox\n"
+                    },
+                    {
+                      "text": "CAPTCHA checkbox successfully checked.\n"
+                    },
+                    {
+                      "text": "Solving CAPTCHA...\n"
+                    },
+                    {
+                      "text": "CAPTCHA solved.\n"
+                    }
+                  ],
+                  "stderr": [
+                    {
+                      "text": "Error clicking Sign In button: page.click: Target page, context or browser has been closed\n    at \u001b[90mC:\\Users\\johnm\\pyth-playwright-project\\\u001b[39mtests\\Semifinaltrading.spec.js:152:20 {\n  [\u001b[32mSymbol(step)\u001b[39m]: {\n    stepId: \u001b[32m'pw:api@384'\u001b[39m,\n    location: {\n      file: \u001b[32m'C:\\\\Users\\\\johnm\\\\pyth-playwright-project\\\\tests\\\\Semifinaltrading.spec.js'\u001b[39m,\n      line: \u001b[33m152\u001b[39m,\n      column: \u001b[33m20\u001b[39m,\n      function: \u001b[90mundefined\u001b[39m\n    },\n    category: \u001b[32m'pw:api'\u001b[39m,\n    title: \u001b[32m'page.click(button[data-overflow-tooltip-text=\"Sign in\"])'\u001b[39m,\n    apiName: \u001b[32m'page.click'\u001b[39m,\n    params: { selector: \u001b[32m'button[data-overflow-tooltip-text=\"Sign in\"]'\u001b[39m },\n    boxedStack: \u001b[90mundefined\u001b[39m,\n    steps: [],\n    complete: \u001b[36m[Function: complete]\u001b[39m,\n    endWallTime: \u001b[33m1727349265502\u001b[39m,\n    error: {\n      message: \u001b[32m'Error: page.click: Target page, context or browser has been closed'\u001b[39m,\n      stack: \u001b[32m'Error: page.click: Target page, context or browser has been closed\\n'\u001b[39m +\n        \u001b[32m'    at C:\\\\Users\\\\johnm\\\\pyth-playwright-project\\\\tests\\\\Semifinaltrading.spec.js:152:20'\u001b[39m\n    }\n  }\n}\n"
+                    }
+                  ],
+                  "retry": 0,
+                  "startTime": "2024-09-26T11:13:51.649Z",
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "506a9ef484fb2c973ba9-2e965b68368679345020",
+          "file": "Semifinaltrading.spec.js",
+          "line": 19,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2024-09-26T11:13:50.790Z",
+    "duration": 34914.632999999994,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

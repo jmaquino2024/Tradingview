@@ -1,0 +1,25 @@
+{
+  "name": "pyth-playwright-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.47.0",
+    "playwright": "^1.46.1"
+  },
+  "dependencies": {
+    "2captcha": "^3.0.5-2",
+    "axios": "^1.7.7",
+    "playwright-core": "^1.46.1",
+    "playwright-extra": "^4.3.6",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-recaptcha": "^3.6.8",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
+  },
+  "description": ""
+}
