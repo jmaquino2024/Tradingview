@@ -672,8 +672,7 @@ test('Automated TradingView Login and Interaction with CAPTCHA Handling and Scre
             await page.click(`[data-value="${value}"]`);
             console.log(`Clicked item with data-value "${value}".`);
 
-            // Short delay to ensure the item is processed
-            await page.waitForTimeout(1000);
+            await page.waitForTimeout(1000); // Short delay to ensure the item is processed
 
             // Check if the overlay close button is visible and try to click it
             const closeButton = page.locator('button.overlayBtn-FvtqqqvS.closeButton-wH0t6WRN');
@@ -681,7 +680,7 @@ test('Automated TradingView Login and Interaction with CAPTCHA Handling and Scre
                 try {
                     await closeButton.click();
                     console.log('Overlay close button clicked.');
-                    await page.waitForTimeout(1000);  // Wait for the overlay to close
+                    await page.waitForTimeout(1000); // Wait for the overlay to close
                 } catch (error) {
                     console.error('Failed to click the overlay close button:', error.message);
                 }
@@ -692,109 +691,133 @@ test('Automated TradingView Login and Interaction with CAPTCHA Handling and Scre
             // Open the indicators dialog
             await page.locator('button[data-name="open-indicators-dialog"][aria-label="Indicators, Metrics & Strategies"]').nth(2).click();
 
-            // Fill in the search input for 'moving average simple'
-            await page.fill('input[data-role="search"]', 'Moving Average Simple');
+            // Fill in the search input for 'Simple Moving Averages (50, 100, 200)'
+            await page.fill('input[data-role="search"]', 'Simple Moving Averages (50, 100. 200)');
 
-            // Define selectors for "Moving Average Simple"
-            const movingAverageSimpleSelector = 'div[data-title="Moving Average Simple"]';
+            // Define selectors for both "Moving Average Simple" and "Relative Strength Index"
+            const movingAverageSimpleSelector = 'div[data-title="Simple Moving Averages (50, 100. 200)"]';
             const simpleMASelector = 'div[data-title="Relative Strength Index"]';
 
             // Wait for the "Moving Average Simple" result to appear and click it
             await page.waitForSelector(movingAverageSimpleSelector);
             await page.click(movingAverageSimpleSelector);
 
-            // After clicking, clear the search input field (if needed)
+            // Clear the search input field
             await page.fill('input[data-role="search"]', '');
 
-            // Fill in the search input for 'Simple Moving Averages'
+            // Fill in the search input for 'Relative Strength Index'
             await page.fill('input[data-role="search"]', 'Relative Strength Index');
 
             // Wait for the "Relative Strength Index" result to appear and click it
             await page.waitForSelector(simpleMASelector);
             await page.click(simpleMASelector);
 
-            // Locate and click the button with data-name="close" to close the dialog
+            // Close the dialog
             await page.click('button[data-name="close"]');
 
             // Short delay to ensure the item is processed
             await page.waitForTimeout(1000);
 
-            // Select the legend source title
-            await page.locator('[data-name="legend-source-title"]').nth(1).click();
+            // await page.pause();
 
-            // Click settings and configure inputs
+            // Click on the legend source title
+            await page.locator('[data-name="legend-source-title"]').nth(1).click();
             await page.locator('button[aria-label="Settings"]').nth(0).click();
-            // Locator for the "Inputs" tab button
-            const inputsTab = page.locator('button[data-id="indicator-properties-dialog-tabs-inputs"]');
 
             // Check if we are in the "Inputs" tab before proceeding
-            const isInputsTabSelected = await inputsTab.evaluate((el) => el.getAttribute('aria-selected') === 'true');
+            const inputsTab = page.locator('#inputs[role="tab"]');
+            const isSelected = await inputsTab.evaluate((el) => el.getAttribute('aria-selected') === 'true');
 
-            if (!isInputsTabSelected) {
+            if (!isSelected) {
                 console.log('Not in the Inputs tab, switching to it.');
                 await inputsTab.click(); // Click to switch to the Inputs tab
-                await page.waitForTimeout(500); // Optional: wait for the tab switch to complete
             } else {
                 console.log('Already in the Inputs tab.');
             }
 
-            // Now proceed with filling the input fields
-            await page.locator('input.input-RUSovanF').first().fill('100');
-            console.log('Filled 50 into the first input field.');
-
-            // Check if we are in the "Style" tab before proceeding
-            const styleTab = page.locator('button[data-id="indicator-properties-dialog-tabs-style"]'); // No await here
-            const isStyleTabSelected = await styleTab.getAttribute('aria-selected');
-
-            // Switch to the "Style" tab if not already selected
-            if (isStyleTabSelected !== 'true') {
-                await styleTab.click(); // Clicking the tab is an action that returns a promise
-                await page.waitForTimeout(500); // Wait for the tab to fully load
+            // Now input the values only if in the Inputs tab
+            const values = [100, 200];
+            for (let i = 0; i < values.length; i++) {
+                const inputLocator = page.locator('input.input-RUSovanF').nth(i);
+                await inputLocator.fill(values[i].toString());
+                console.log(`Filled value ${values[i]} into input field ${i + 1}`);
             }
 
-            // Proceed with interacting with elements inside the "Style" tab
-            await page.locator('button.button-HBcDEU4c').nth(0).click(); // Click the first button inside Style tab
-            await page.locator('button.swatch-sfn7Lezv[data-role="swatch"][style*="rgb(67, 70, 81)"]').click(); // Click color swatch
-            await page.locator('div.thicknessItem-QStmZL8l > input[type="radio"][value="3"]').click(); // Select thickness
-            await page.keyboard.press('Escape'); // Close modal or pop-up if any
-            await page.locator('button[data-name="submit-button"]').click(); // Click the submit button
+            // Locator for the "Style" tab button
+            const styleTab = page.locator('#style[role="tab"]');
 
-            // Configure another legend source title and settings
+            // Check if we are in the "Style" tab before proceeding
+            const isSelected1 = await styleTab.evaluate((el) => el.getAttribute('aria-selected') === 'true');
+
+            if (!isSelected1) {
+                console.log('Not in the Style tab, switching to it.');
+                await styleTab.click(); // Click to switch to the Style tab
+                await page.waitForTimeout(500); // Optional: wait for the tab switch to complete
+            } else {
+                console.log('Already in the Style tab.');
+            }
+
+            // Array to store different color styles
+            const colorStyles = [
+                'rgb(67, 70, 81)',  // First color
+                'rgb(0, 51, 42)',   // Second color
+            ];
+
+            // Configure button clicks with specific styles and thicknesses
+            for (let j = 0; j < colorStyles.length; j++) {
+                await page.locator('button.button-HBcDEU4c').nth(j).click(); // Click button
+
+                // Click the color swatch corresponding to the current color in the loop
+                await page.locator(`button.swatch-sfn7Lezv[data-role="swatch"][style*="${colorStyles[j]}"]`).click();
+
+                await page.locator('div.thicknessItem-QStmZL8l > input[type="radio"][value="3"]').click(); // Click thickness
+                await page.keyboard.press('Escape'); // Close the modal or pop-up if any
+            }
+
+            // Locate the third checkbox
+            const checkbox = page.locator('input.input-GZajBGIm').nth(2);
+
+            // Ensure the checkbox is visible and enabled before clicking
+            if (await checkbox.isVisible() && !(await checkbox.isDisabled())) {
+                await checkbox.click({ force: true }); // Use force click if necessary
+            } else {
+                console.log("Checkbox is not visible or disabled.");
+            }
+
+            // Optionally assert that the checkbox is now unchecked
+            const isChecked = await checkbox.isChecked();
+            if (!isChecked) {
+                console.log("Checkbox is now unticked.");
+            } else {
+                console.log("Checkbox is still checked.");
+            }
+
+            await page.locator('button[data-name="submit-button"]').click(); // Submit changes
             await page.locator('[data-name="legend-source-title"]').nth(2).click();
             await page.locator('button[aria-label="Settings"]').nth(1).click();
+            
+            // Click the style tab again and submit
+            await page.locator('button[data-id="indicator-properties-dialog-tabs-style"]').click();
+            await page.locator('button.button-HBcDEU4c').nth(1).click();
+            await page.locator('button.swatch-sfn7Lezv[data-role="swatch"][style*="rgb(67, 70, 81)"]').click();
+            await page.locator('button[data-name="submit-button"]').click();
 
-            // Check if we are in the "Style" tab before proceeding
-            const styleTab1 = page.locator('button[data-id="indicator-properties-dialog-tabs-style"]');
-            const isStyleTabSelected1 = await styleTab.getAttribute('aria-selected');
-
-            // Switch to the "Style" tab if not already selected
-            if (isStyleTabSelected1 !== 'true') {
-                await styleTab1.click();
-                await page.waitForTimeout(500); // Wait for the tab to fully load
-            }
-
-            // Proceed with interacting with elements inside the "Style" tab
-            await page.locator('button.button-HBcDEU4c').nth(1).click(); // Click the second button inside Style tab
-            await page.locator('button.swatch-sfn7Lezv[data-role="swatch"][style*="rgb(67, 70, 81)"]').click(); // Click color swatch
-            await page.locator('button[data-name="submit-button"]').click(); // Click the submit button
-
-            // Open the custom range date picker
+            // Open the date range selection
             await page.click('button[aria-label="Go to"][data-name="go-to-date"]');
-            await page.click('#CustomRange');
+            await page.click('#CustomRange'); // Ensure the "Custom range" tab is selected
 
-            // Verify "Custom range" is selected and handle date input
+            // Verify that you're in the "Custom range" path
             const isCustomRangeSelected = await page.$eval('#CustomRange', element => element.getAttribute('aria-selected') === 'true');
             if (!isCustomRangeSelected) {
                 console.error('Custom range is not selected.');
-                await browser.close();
+                await browser.close(); // Close the browser or handle accordingly if not selected
                 return;
             }
 
-            // Calculate and set start/end dates (12 months back)
+            // Set date range
             const today = new Date();
             const startDate = new Date(today);
             startDate.setMonth(today.getMonth() - 12);
-
             const formattedStartDate = startDate.toISOString().split('T')[0];
             const formattedEndDate = today.toISOString().split('T')[0];
 
@@ -802,32 +825,39 @@ test('Automated TradingView Login and Interaction with CAPTCHA Handling and Scre
             await page.fill('input[data-name="end-date-range"]', formattedEndDate);
             await page.press('input[data-name="end-date-range"]', 'Enter');
 
-            // Take a snapshot and handle download
-            await page.waitForTimeout(2000); // Short delay to ensure fullscreen mode
+            // Short delay for fullscreen mode activation
+            await page.waitForTimeout(2000);
+
+            // Click the "Take a snapshot" button
             await page.locator('#header-toolbar-screenshot svg').click();
 
+            // Wait for the download event
             const [download] = await Promise.all([
                 page.waitForEvent('download'),
                 page.locator('div[data-name="save-chart-image"]').click(),
             ]);
 
+            // Save the downloaded file to the specified folder
             const filePath = path.join(downloadFolder, download.suggestedFilename());
-            await download.saveAs(filePath);
-            console.log(`Snapshot taken and saved as chart image in: ${filePath}`);
-            await page.waitForTimeout(1000);
+            await download.saveAs(filePath); // Save to the defined folder
 
-            // If there's a next value, click the button below
-            if (i < values2.length - 1) {
-                await page.locator('button.menu-S_1OCXUK.button-merBkM5y').nth(2).click();
+            // Log the completion message
+            console.log(`Snapshot taken and saved as chart image in: ${filePath}`);
+
+            await page.waitForTimeout(1000); // Short delay to ensure the action takes effect
+
+            // Check if there is a next value
+            if (i < values1.length - 1) {
+                await page.locator('button.menu-S_1OCXUK.button-merBkM5y').nth(2).click(); // Return to click the button below
                 console.log('Clicked the button below.');
-                await page.waitForTimeout(2000);
+                await page.waitForTimeout(2000); // Short delay to ensure the button click is processed
             }
 
         } catch (error) {
             console.error(`Error handling item with data-value "${value}": ${error.message}`);
         }
     }
-
+    
     // Final delay to view the page after all clicks
     await page.waitForTimeout(2000);
 

@@ -661,179 +661,207 @@ while (true) {
     }
 }
 
-// await page.pause();
+    // await page.pause();
 
-// Click the third button with the specific class
-await page.locator('button.menu-S_1OCXUK.button-merBkM5y').nth(2).click();
+    // Click the third button with the specific class
+    await page.locator('button.menu-S_1OCXUK.button-merBkM5y').nth(2).click();
 
-const values3 = ['1W'];
+    // Define the values to click
+    const values3 = ['1W'];
 
-for (let i = 0; i < values3.length; i++) {
-    const value = values3[i];
-    try {
-        await page.click(`[data-value="${value}"]`);
-        console.log(`Clicked item with data-value "${value}".`);
-        await page.waitForTimeout(1000);
+    for (let i = 0; i < values3.length; i++) {
+        const value = values3[i];
+        try {
+            // Click on the item with the specific data-value
+            await page.click(`[data-value="${value}"]`);
+            console.log(`Clicked item with data-value "${value}".`);
 
-        const closeButton = page.locator('button.overlayBtn-FvtqqqvS.closeButton-wH0t6WRN');
-        if (await closeButton.isVisible()) {
-            try {
-                await closeButton.click();
-                console.log('Overlay close button clicked.');
-                await page.waitForTimeout(1000);
-            } catch (error) {
-                console.error('Failed to click the overlay close button:', error.message);
+            await page.waitForTimeout(1000); // Short delay to ensure the item is processed
+
+            // Check if the overlay close button is visible and try to click it
+            const closeButton = page.locator('button.overlayBtn-FvtqqqvS.closeButton-wH0t6WRN');
+            if (await closeButton.isVisible()) {
+                try {
+                    await closeButton.click();
+                    console.log('Overlay close button clicked.');
+                    await page.waitForTimeout(1000); // Wait for the overlay to close
+                } catch (error) {
+                    console.error('Failed to click the overlay close button:', error.message);
+                }
+            } else {
+                console.log('Overlay close button not visible.');
             }
-        } else {
-            console.log('Overlay close button not visible.');
-        }
 
-        // Open the indicators dialog
-        await page.locator('button[data-name="open-indicators-dialog"][aria-label="Indicators, Metrics & Strategies"]').nth(2).click();
-        await page.fill('input[data-role="search"]', 'Moving Average Simple');
-        const movingAverageSimpleSelector = 'div[data-title="Moving Average Simple"]';
-        await page.waitForSelector(movingAverageSimpleSelector);
-        await page.click(movingAverageSimpleSelector);
-        await page.fill('input[data-role="search"]', 'Relative Strength Index');
-        const simpleMASelector = 'div[data-title="Relative Strength Index"]';
-        await page.waitForSelector(simpleMASelector);
-        await page.click(simpleMASelector);
-        await page.click('button[data-name="close"]');
-        await page.waitForTimeout(1000);
+            // Open the indicators dialog
+            await page.locator('button[data-name="open-indicators-dialog"][aria-label="Indicators, Metrics & Strategies"]').nth(2).click();
 
-        // Configure inputs for 100 and take a snapshot
-        await page.locator('[data-name="legend-source-title"]').nth(1).click();
-        await page.locator('button[aria-label="Settings"]').nth(0).click();
-        const inputsTab = page.locator('button[data-id="indicator-properties-dialog-tabs-inputs"]');
-        const isInputsTabSelected = await inputsTab.evaluate(el => el.getAttribute('aria-selected') === 'true');
-        if (!isInputsTabSelected) {
-            await inputsTab.click();
-            await page.waitForTimeout(500);
-        }
-        await page.locator('input.input-RUSovanF').first().fill('100');
-        console.log('Filled 100 into the first input field.');
+            // Fill in the search input for 'Simple Moving Averages (50, 100, 200)'
+            await page.fill('input[data-role="search"]', 'Simple Moving Averages (50, 100. 200)');
 
-      // Check if we are in the "Style" tab before proceeding
-        const styleTab = page.locator('button[data-id="indicator-properties-dialog-tabs-style"]'); // No await here
-        const isStyleTabSelected = await styleTab.getAttribute('aria-selected');
+            // Define selectors for both "Moving Average Simple" and "Relative Strength Index"
+            const movingAverageSimpleSelector = 'div[data-title="Simple Moving Averages (50, 100. 200)"]';
+            const simpleMASelector = 'div[data-title="Relative Strength Index"]';
 
-        // Switch to the "Style" tab if not already selected
-        if (isStyleTabSelected !== 'true') {
-            await styleTab.click(); // Clicking the tab is an action that returns a promise
-            await page.waitForTimeout(500); // Wait for the tab to fully load
-        }
+            // Wait for the "Moving Average Simple" result to appear and click it
+            await page.waitForSelector(movingAverageSimpleSelector);
+            await page.click(movingAverageSimpleSelector);
 
-        // Proceed with interacting with elements inside the "Style" tab
-        await page.locator('button.button-HBcDEU4c').nth(0).click(); // Click the first button inside Style tab
-        await page.locator('button.swatch-sfn7Lezv[data-role="swatch"][style*="rgb(67, 70, 81)"]').click(); // Click color swatch
-        await page.locator('div.thicknessItem-QStmZL8l > input[type="radio"][value="3"]').click(); // Select thickness
-        await page.keyboard.press('Escape'); // Close modal or pop-up if any
-        await page.locator('button[data-name="submit-button"]').click(); // Click the submit button
+            // Clear the search input field
+            await page.fill('input[data-role="search"]', '');
 
-        // Configure another legend source title and settings
-        await page.locator('[data-name="legend-source-title"]').nth(2).click();
-        await page.locator('button[aria-label="Settings"]').nth(1).click();
+            // Fill in the search input for 'Relative Strength Index'
+            await page.fill('input[data-role="search"]', 'Relative Strength Index');
 
-        // Check if we are in the "Style" tab before proceeding
-        const styleTab1 = page.locator('button[data-id="indicator-properties-dialog-tabs-style"]');
-        const isStyleTabSelected1 = await styleTab.getAttribute('aria-selected');
+            // Wait for the "Relative Strength Index" result to appear and click it
+            await page.waitForSelector(simpleMASelector);
+            await page.click(simpleMASelector);
 
-        // Switch to the "Style" tab if not already selected
-        if (isStyleTabSelected1 !== 'true') {
-            await styleTab1.click();
-            await page.waitForTimeout(500); // Wait for the tab to fully load
-        }
+            // Close the dialog
+            await page.click('button[data-name="close"]');
 
-        // Proceed with interacting with elements inside the "Style" tab
-        await page.locator('button.button-HBcDEU4c').nth(1).click(); // Click the second button inside Style tab
-        await page.locator('button.swatch-sfn7Lezv[data-role="swatch"][style*="rgb(67, 70, 81)"]').click(); // Click color swatch
-        await page.locator('button[data-name="submit-button"]').click(); // Click the submit button
+            // Short delay to ensure the item is processed
+            await page.waitForTimeout(1000);
 
-        // Open the custom range date picker
-        await page.click('button[aria-label="Go to"][data-name="go-to-date"]');
-        await page.click('#CustomRange');
+            // await page.pause();
 
-        // Verify "Custom range" is selected and handle date input
-        const isCustomRangeSelected = await page.$eval('#CustomRange', element => element.getAttribute('aria-selected') === 'true');
-        if (!isCustomRangeSelected) {
-            console.error('Custom range is not selected.');
-            await browser.close();
-            return;
-        }
+            // Click on the legend source title
+            await page.locator('[data-name="legend-source-title"]').nth(1).click();
+            await page.locator('button[aria-label="Settings"]').nth(0).click();
 
-        // Calculate and set start/end dates (12 months back)
-        const today = new Date();
-        const startDate = new Date(today);
-        startDate.setMonth(today.getMonth() - 12);
+            // Check if we are in the "Inputs" tab before proceeding
+            const inputsTab = page.locator('#inputs[role="tab"]');
+            const isSelected = await inputsTab.evaluate((el) => el.getAttribute('aria-selected') === 'true');
 
-        const formattedStartDate = startDate.toISOString().split('T')[0];
-        const formattedEndDate = today.toISOString().split('T')[0];
+            if (!isSelected) {
+                console.log('Not in the Inputs tab, switching to it.');
+                await inputsTab.click(); // Click to switch to the Inputs tab
+            } else {
+                console.log('Already in the Inputs tab.');
+            }
 
-        await page.fill('input[data-name="start-date-range"]', formattedStartDate);
-        await page.fill('input[data-name="end-date-range"]', formattedEndDate);
-        await page.press('input[data-name="end-date-range"]', 'Enter');
+            // Now input the values only if in the Inputs tab
+            const values = [100, 200];
+            for (let i = 0; i < values.length; i++) {
+                const inputLocator = page.locator('input.input-RUSovanF').nth(i);
+                await inputLocator.fill(values[i].toString());
+                console.log(`Filled value ${values[i]} into input field ${i + 1}`);
+            }
 
-        await page.waitForTimeout(2000); // Short delay to ensure fullscreen mode
+            // Locator for the "Style" tab button
+            const styleTab = page.locator('#style[role="tab"]');
 
-        // Take a snapshot for 100 input
-        await page.locator('#header-toolbar-screenshot svg').click();
-        const [download1] = await Promise.all([
-            page.waitForEvent('download'),
-            page.locator('div[data-name="save-chart-image"]').click(),
-        ]);
-        const filePath1 = path.join(downloadFolder, download1.suggestedFilename());
-        await download1.saveAs(filePath1);
-        console.log(`Snapshot for 100 taken and saved as chart image: ${filePath1}`);
-        await page.waitForTimeout(1000);
+            // Check if we are in the "Style" tab before proceeding
+            const isSelected1 = await styleTab.evaluate((el) => el.getAttribute('aria-selected') === 'true');
 
-                // Select the legend source title
-        await page.locator('[data-name="legend-source-title"]').nth(1).click();
+            if (!isSelected1) {
+                console.log('Not in the Style tab, switching to it.');
+                await styleTab.click(); // Click to switch to the Style tab
+                await page.waitForTimeout(500); // Optional: wait for the tab switch to complete
+            } else {
+                console.log('Already in the Style tab.');
+            }
 
-        // Click settings and configure inputs
-        await page.locator('button[aria-label="Settings"]').nth(0).click();
-        // Locator for the "Inputs" tab button
-        const inputsTab0 = page.locator('button[data-id="indicator-properties-dialog-tabs-inputs"]');
+            // Array to store different color styles
+            const colorStyles = [
+                'rgb(67, 70, 81)',  // First color
+                'rgb(0, 51, 42)',   // Second color
+            ];
 
-        // Check if we are in the "Inputs" tab before proceeding
-        const isInputsTabSelected0 = await inputsTab0.evaluate((el) => el.getAttribute('aria-selected') === 'true');
+            // Configure button clicks with specific styles and thicknesses
+            for (let j = 0; j < colorStyles.length; j++) {
+                await page.locator('button.button-HBcDEU4c').nth(j).click(); // Click button
 
-        if (!isInputsTabSelected0) {
-            console.log('Not in the Inputs tab, switching to it.');
-            await inputsTab0.click(); // Click to switch to the Inputs tab
-            await page.waitForTimeout(500); // Optional: wait for the tab switch to complete
-        } else {
-            console.log('Already in the Inputs tab.');
-        }
+                // Click the color swatch corresponding to the current color in the loop
+                await page.locator(`button.swatch-sfn7Lezv[data-role="swatch"][style*="${colorStyles[j]}"]`).click();
 
-        // Change input to 200 and take another snapshot (no editing of style/date)
-        await page.locator('input.input-RUSovanF').first().fill('200');
-        console.log('Filled 200 into the first input field.');
-        await page.click('button[data-name="submit-button"]');
-        await page.waitForTimeout(2000); // Ensure input is processed
+                await page.locator('div.thicknessItem-QStmZL8l > input[type="radio"][value="3"]').click(); // Click thickness
+                await page.keyboard.press('Escape'); // Close the modal or pop-up if any
+            }
 
-        // Take a snapshot for 200 input
-        await page.locator('#header-toolbar-screenshot svg').click();
-        const [download2] = await Promise.all([
-            page.waitForEvent('download'),
-            page.locator('div[data-name="save-chart-image"]').click(),
-        ]);
-        const filePath2 = path.join(downloadFolder, download2.suggestedFilename());
-        await download2.saveAs(filePath2);
-        console.log(`Snapshot for 200 taken and saved as chart image: ${filePath2}`);
-        await page.waitForTimeout(1000);
+            // Locate the third checkbox
+            const checkbox = page.locator('input.input-GZajBGIm').nth(2);
 
-        // If there's a next value, click the button below
-        if (i < values3.length - 1) {
-            await page.locator('button.menu-S_1OCXUK.button-merBkM5y').nth(2).click();
-            console.log('Clicked the button below.');
+            // Ensure the checkbox is visible and enabled before clicking
+            if (await checkbox.isVisible() && !(await checkbox.isDisabled())) {
+                await checkbox.click({ force: true }); // Use force click if necessary
+            } else {
+                console.log("Checkbox is not visible or disabled.");
+            }
+
+            // Optionally assert that the checkbox is now unchecked
+            const isChecked = await checkbox.isChecked();
+            if (!isChecked) {
+                console.log("Checkbox is now unticked.");
+            } else {
+                console.log("Checkbox is still checked.");
+            }
+
+            await page.locator('button[data-name="submit-button"]').click(); // Submit changes
+            await page.locator('[data-name="legend-source-title"]').nth(2).click();
+            await page.locator('button[aria-label="Settings"]').nth(1).click();
+            
+            // Click the style tab again and submit
+            await page.locator('button[data-id="indicator-properties-dialog-tabs-style"]').click();
+            await page.locator('button.button-HBcDEU4c').nth(1).click();
+            await page.locator('button.swatch-sfn7Lezv[data-role="swatch"][style*="rgb(67, 70, 81)"]').click();
+            await page.locator('button[data-name="submit-button"]').click();
+
+            // Open the date range selection
+            await page.click('button[aria-label="Go to"][data-name="go-to-date"]');
+            await page.click('#CustomRange'); // Ensure the "Custom range" tab is selected
+
+            // Verify that you're in the "Custom range" path
+            const isCustomRangeSelected = await page.$eval('#CustomRange', element => element.getAttribute('aria-selected') === 'true');
+            if (!isCustomRangeSelected) {
+                console.error('Custom range is not selected.');
+                await browser.close(); // Close the browser or handle accordingly if not selected
+                return;
+            }
+
+            // Set date range
+            const today = new Date();
+            const startDate = new Date(today);
+            startDate.setMonth(today.getMonth() - 12);
+            const formattedStartDate = startDate.toISOString().split('T')[0];
+            const formattedEndDate = today.toISOString().split('T')[0];
+
+            await page.fill('input[data-name="start-date-range"]', formattedStartDate);
+            await page.fill('input[data-name="end-date-range"]', formattedEndDate);
+            await page.press('input[data-name="end-date-range"]', 'Enter');
+
+            // Short delay for fullscreen mode activation
             await page.waitForTimeout(2000);
+
+            // Click the "Take a snapshot" button
+            await page.locator('#header-toolbar-screenshot svg').click();
+
+            // Wait for the download event
+            const [download] = await Promise.all([
+                page.waitForEvent('download'),
+                page.locator('div[data-name="save-chart-image"]').click(),
+            ]);
+
+            // Save the downloaded file to the specified folder
+            const filePath = path.join(downloadFolder, download.suggestedFilename());
+            await download.saveAs(filePath); // Save to the defined folder
+
+            // Log the completion message
+            console.log(`Snapshot taken and saved as chart image in: ${filePath}`);
+
+            await page.waitForTimeout(1000); // Short delay to ensure the action takes effect
+
+            // Check if there is a next value
+            if (i < values1.length - 1) {
+                await page.locator('button.menu-S_1OCXUK.button-merBkM5y').nth(2).click(); // Return to click the button below
+                console.log('Clicked the button below.');
+                await page.waitForTimeout(2000); // Short delay to ensure the button click is processed
+            }
+
+        } catch (error) {
+            console.error(`Error handling item with data-value "${value}": ${error.message}`);
         }
-
-    } catch (error) {
-        console.error(`Failed to click item with data-value "${value}":`, error);
     }
-}
-
+    
 // Final delay to view the page after all clicks
 await page.waitForTimeout(2000);
 

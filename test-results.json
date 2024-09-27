@@ -55,8 +55,8 @@
   },
   "suites": [
     {
-      "title": "Semifinaltrading.spec.js",
-      "file": "Semifinaltrading.spec.js",
+      "title": "Finalnewtradingview.spec.js",
+      "file": "Finalnewtradingview.spec.js",
       "column": 0,
       "line": 0,
       "specs": [
@@ -75,20 +75,20 @@
                 {
                   "workerIndex": 0,
                   "status": "passed",
-                  "duration": 34023,
+                  "duration": 70488,
                   "errors": [],
                   "stdout": [
                     {
-                      "text": "Blocked: https://ad.doubleclick.net/ddm/activity/src=13919399;type=wcount;cat=visit;u27=;u28=undefined;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;tfua=;npa=;ord=953.8733702032915?\n"
+                      "text": "Blocked: https://ad.doubleclick.net/ddm/activity/src=13919399;type=wcount;cat=visit;u27=;u28=undefined;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;tfua=;npa=;ord=211.6848848773285?\n"
                     },
                     {
-                      "text": "Blocked: https://stats.g.doubleclick.net/g/collect?v=2&tid=G-YVVRYGL0E0&cid=1657308114.1727349236&gtm=45je49n0v9104254764za200&aip=1&dma=0&gcs=G1-0&gcd=13l3p3l3l5l1&npa=0&frm=0&tag_exp=101671035~101747727\n"
+                      "text": "Blocked: https://stats.g.doubleclick.net/g/collect?v=2&tid=G-YVVRYGL0E0&cid=1901085300.1727428454&gtm=45je49p0v9104254764za200&aip=1&dma=0&gcs=G1-0&gcd=13l3p3l3l5l1&npa=0&frm=0&tag_exp=101671035~101686685~101747727\n"
                     },
                     {
-                      "text": "Blocked: https://td.doubleclick.net/td/ga/rul?tid=G-YVVRYGL0E0&gacid=1657308114.1727349236&gtm=45je49n0v9104254764za200&dma=0&gcs=G1-0&gcd=13l3p3l3l5l1&npa=0&pscdl=noapi&aip=1&fledge=1&frm=0&tag_exp=101671035~101747727&z=1607039602\n"
+                      "text": "Blocked: https://td.doubleclick.net/td/ga/rul?tid=G-YVVRYGL0E0&gacid=1901085300.1727428454&gtm=45je49p0v9104254764za200&dma=0&gcs=G1-0&gcd=13l3p3l3l5l1&npa=0&pscdl=noapi&aip=1&fledge=1&frm=0&tag_exp=101671035~101686685~101747727&z=245254983\n"
                     },
                     {
-                      "text": "Blocked: https://stats.g.doubleclick.net/g/collect?v=2&tid=G-YVVRYGL0E0&cid=1657308114.1727349236&gtm=45je49n0v9104254764za200&aip=1&dma=0&gcs=G1-1&gcd=13l3r3l3l5l1&npa=0&frm=0&tag_exp=101671035~101747727\n"
+                      "text": "Blocked: https://stats.g.doubleclick.net/g/collect?v=2&tid=G-YVVRYGL0E0&cid=1901085300.1727428454&gtm=45je49p0v9104254764za200&aip=1&dma=0&gcs=G1-1&gcd=13l3r3l3l5l1&npa=0&frm=0&tag_exp=101671035~101686685~101747727\n"
                     },
                     {
                       "text": "Clicked the CAPTCHA checkbox\n"
@@ -101,23 +101,94 @@
                     },
                     {
                       "text": "CAPTCHA solved.\n"
-                    }
-                  ],
-                  "stderr": [
+                    },
                     {
-                      "text": "Error clicking Sign In button: page.click: Target page, context or browser has been closed\n    at \u001b[90mC:\\Users\\johnm\\pyth-playwright-project\\\u001b[39mtests\\Semifinaltrading.spec.js:152:20 {\n  [\u001b[32mSymbol(step)\u001b[39m]: {\n    stepId: \u001b[32m'pw:api@384'\u001b[39m,\n    location: {\n      file: \u001b[32m'C:\\\\Users\\\\johnm\\\\pyth-playwright-project\\\\tests\\\\Semifinaltrading.spec.js'\u001b[39m,\n      line: \u001b[33m152\u001b[39m,\n      column: \u001b[33m20\u001b[39m,\n      function: \u001b[90mundefined\u001b[39m\n    },\n    category: \u001b[32m'pw:api'\u001b[39m,\n    title: \u001b[32m'page.click(button[data-overflow-tooltip-text=\"Sign in\"])'\u001b[39m,\n    apiName: \u001b[32m'page.click'\u001b[39m,\n    params: { selector: \u001b[32m'button[data-overflow-tooltip-text=\"Sign in\"]'\u001b[39m },\n    boxedStack: \u001b[90mundefined\u001b[39m,\n    steps: [],\n    complete: \u001b[36m[Function: complete]\u001b[39m,\n    endWallTime: \u001b[33m1727349265502\u001b[39m,\n    error: {\n      message: \u001b[32m'Error: page.click: Target page, context or browser has been closed'\u001b[39m,\n      stack: \u001b[32m'Error: page.click: Target page, context or browser has been closed\\n'\u001b[39m +\n        \u001b[32m'    at C:\\\\Users\\\\johnm\\\\pyth-playwright-project\\\\tests\\\\Semifinaltrading.spec.js:152:20'\u001b[39m\n    }\n  }\n}\n"
+                      "text": "Clicked Sign In after CAPTCHA solved.\n"
+                    },
+                    {
+                      "text": "No CAPTCHA-related errors detected. Continuing with login process.\n"
+                    },
+                    {
+                      "text": "Blocked: https://ad.doubleclick.net/ddm/activity/src=13919399;type=wcount;cat=visit;u27=9100b84d-9735-4d8b-8b6b-ecc41f5e08ab;u28=88594234;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;tfua=;npa=;ord=130.76922717562334?\n"
+                    },
+                    {
+                      "text": "Clicked item with data-value \"240\".\n"
+                    },
+                    {
+                      "text": "Overlay close button not visible.\n"
+                    },
+                    {
+                      "text": "Not in the Inputs tab, switching to it.\n"
+                    },
+                    {
+                      "text": "Filled value 9 into input field 1\n"
+                    },
+                    {
+                      "text": "Filled value 14 into input field 2\n"
+                    },
+                    {
+                      "text": "Filled value 21 into input field 3\n"
+                    },
+                    {
+                      "text": "Not in the Style tab, switching to it.\n"
+                    },
+                    {
+                      "text": "Snapshot taken and saved as chart image in: C:\\Users\\johnm\\pyth-playwright-project\\Screenshots\\OXTUSDT_2024-09-27_17-14-47.png\n"
+                    },
+                    {
+                      "text": "Clicked item with data-value \"1D\".\n"
+                    },
+                    {
+                      "text": "Overlay close button not visible.\n"
+                    },
+                    {
+                      "text": "Not in the Inputs tab, switching to it.\n"
+                    },
+                    {
+                      "text": "Filled 50 into the first input field.\n"
+                    },
+                    {
+                      "text": "Snapshot taken and saved as chart image in: C:\\Users\\johnm\\pyth-playwright-project\\Screenshots\\OXTUSDT_2024-09-27_17-15-02.png\n"
+                    },
+                    {
+                      "text": "Clicked item with data-value \"1W\".\n"
+                    },
+                    {
+                      "text": "Overlay close button not visible.\n"
+                    },
+                    {
+                      "text": "Not in the Inputs tab, switching to it.\n"
+                    },
+                    {
+                      "text": "Filled value 100 into input field 1\n"
+                    },
+                    {
+                      "text": "Filled value 200 into input field 2\n"
+                    },
+                    {
+                      "text": "Not in the Style tab, switching to it.\n"
+                    },
+                    {
+                      "text": "Checkbox is now unticked.\n"
+                    },
+                    {
+                      "text": "Blocked: https://td.doubleclick.net/td/ga/rul?tid=G-YVVRYGL0E0&gacid=1901085300.1727428454&gtm=45je49p0v9104254764za200&dma=0&gcs=G1-1&gcd=13l3t3l3l5l1&npa=0&pscdl=noapi&aip=1&fledge=1&frm=0&tag_exp=101671035~101747727&z=1771797506\n"
+                    },
+                    {
+                      "text": "Snapshot taken and saved as chart image in: C:\\Users\\johnm\\pyth-playwright-project\\Screenshots\\OXTUSDT_2024-09-27_17-15-17.png\n"
                     }
                   ],
+                  "stderr": [],
                   "retry": 0,
-                  "startTime": "2024-09-26T11:13:51.649Z",
+                  "startTime": "2024-09-27T09:14:09.850Z",
                   "attachments": []
                 }
               ],
               "status": "expected"
             }
           ],
-          "id": "506a9ef484fb2c973ba9-2e965b68368679345020",
-          "file": "Semifinaltrading.spec.js",
+          "id": "2219a92eb9d7939b53c3-17f4d0c1cd74efd3c8bf",
+          "file": "Finalnewtradingview.spec.js",
           "line": 19,
           "column": 5
         }
@@ -126,8 +197,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2024-09-26T11:13:50.790Z",
-    "duration": 34914.632999999994,
+    "startTime": "2024-09-27T09:14:09.205Z",
+    "duration": 71171.86,
     "expected": 1,
     "skipped": 0,
     "unexpected": 0,
