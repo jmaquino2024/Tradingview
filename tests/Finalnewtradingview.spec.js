@@ -59,9 +59,6 @@ test('Automated TradingView Login and Interaction with CAPTCHA Handling and Scre
     // Navigate to the page
     await page.goto('https://www.tradingview.com/pricing/?source=account_activate&feature=redirect', { waitUntil: 'networkidle' });
 
-    // Wait for the page to fully load
-    await page.waitForLoadState('load');
-
     // Open user menu and sign in
     await page.click('button[aria-label="Open user menu"]');
     await page.click('button[data-name="header-user-menu-sign-in"]');
@@ -166,8 +163,14 @@ test('Automated TradingView Login and Interaction with CAPTCHA Handling and Scre
         console.log('No CAPTCHA-related errors detected. Continuing with login process.');
     }
 
-    // Click the search button
-    await page.locator('button.tv-header-search-container[aria-label="Search"]').click();
+// Wait for the search button to be visible before clicking
+await page.waitForSelector('button.tv-header-search-container[aria-label="Search"]', { state: 'visible' });
+
+// Add a delay of 2 seconds before clicking
+await page.waitForTimeout(2000);
+
+// Click the search button by its aria-label
+await page.locator('button.tv-header-search-container[aria-label="Search"]').click();
 
     // Fill the search input with "OXTUSDT"
     await page.fill('input[placeholder="Symbol, eg. AAPL"]', 'OXTUSDT'); 
