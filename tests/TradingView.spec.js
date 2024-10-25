@@ -5,69 +5,46 @@ const { chromium } = require('playwright-extra'); // Importing chromium from pla
 const stealth = require('puppeteer-extra-plugin-stealth'); // Importing stealth plugin to evade detection in web scraping
 const RecaptchaPlugin = require('puppeteer-extra-plugin-recaptcha'); // Importing reCAPTCHA plugin to handle CAPTCHA challenges in Puppeteer
 
-    // Add 2Captcha plugin and stealth mode
-    chromium.use(stealth()).use(
-        RecaptchaPlugin({
-            provider: {
-                id: '2captcha',
-                token: '8bbfe06938494780b6718a9e8376ab6c', // Replace with your actual 2Captcha API key
-            },
-            visualFeedback: true, // Optional: colorize reCAPTCHAs (violet = detected, green = solved)
-        })
-    );
+// Add 2Captcha plugin and stealth mode
+chromium.use(stealth()).use(
+    RecaptchaPlugin({
+        provider: {
+            id: '2captcha',
+            token: '8bbfe06938494780b6718a9e8376ab6c', // Replace with your actual 2Captcha API key
+        },
+        visualFeedback: true,
+    })
+);
 
-test('Automated TradingView Login and Interaction with CAPTCHA Handling and Screenshot Capture', async () => {
-    test.setTimeout(300000); // Set a generous timeout
+test('Optimized CAPTCHA Handling with Automated TradingView Login', async () => {
+    test.setTimeout(300000);
 
-    // Define the download folder path
     const downloadFolder = 'C:\\Users\\johnm\\pyth-playwright-project\\Screenshots';
+    if (!fs.existsSync(downloadFolder)) fs.mkdirSync(downloadFolder, { recursive: true });
 
-    // Create the folder if it doesn't exist
-    if (!fs.existsSync(downloadFolder)) {
-        fs.mkdirSync(downloadFolder, { recursive: true });
-    }
-
-    // Launch browser using puppeteer-extra's chromium with stealth and CAPTCHA plugins
-    const browser = await chromium.launch();
-
-    // Create a new browser context for a fresh session
+    const browser = await chromium.launch({ headless: false });
     const context = await browser.newContext();
+    const page = await context.newPage();
 
-    // Create a new page in this fresh context
-    const page = await context.newPage();   
+    // Block ad requests
+    await page.route('**/*', (route) => {
+        const blockedResources = ['adsbygoogle', 'doubleclick.net', 'googlesyndication.com'];
+        blockedResources.some(res => route.request().url().includes(res)) ? route.abort() : route.continue();
+    });
 
-        // Block known ad URLs
-        await page.route('**/*', (route) => {
-            const url = route.request().url();
-            const blockedResources = [
-                'adsbygoogle',
-                'doubleclick.net',
-                'googlesyndication.com',
-                'adservice.google.com',
-                'adserver.com',
-            ];
-    
-            // Block requests to known ad domains
-            if (blockedResources.some(resource => url.includes(resource))) {
-                route.abort();
-                console.log(`Blocked: ${url}`);
-            } else {
-                route.continue();
-            }
-        });
-
-    // Navigate to the page
+    // Navigate and disable animations
     await page.goto('https://www.tradingview.com/pricing/?source=account_activate&feature=redirect', { waitUntil: 'networkidle' });
+    await page.addStyleTag({ content: `*, *::before, *::after { transition: none !important; animation: none !important; }` });
 
-    // Open user menu and sign in
+    // Open user menu and start login
     await page.click('button[aria-label="Open user menu"]');
     await page.click('button[data-name="header-user-menu-sign-in"]');
     await page.getByRole('button', { name: 'Email' }).click();
-    await page.fill('input#id_username', 'bihed51062@rinseart.com');
+    await page.fill('input#id_username', 'seseve8915@evasud.com');
     await page.fill('input#id_password', '@dmin-2024!!!');
     await page.click('button[data-overflow-tooltip-text="Sign in"]');
 
-    // Wait for CAPTCHA iframe to appear and solve it
+    // Wait for CAPTCHA iframe and handle it
     const captchaIframe = await page.waitForSelector('iframe[title="reCAPTCHA"]');
     if (!captchaIframe) {
         console.error('CAPTCHA iframe not found');
@@ -78,57 +55,38 @@ test('Automated TradingView Login and Interaction with CAPTCHA Handling and Scre
     const frame = await captchaIframe.contentFrame();
     await frame.waitForSelector('div.recaptcha-checkbox-border');
 
-    // Function to handle CAPTCHA solving with retries
+    // Handle CAPTCHA with retry mechanism
     async function handleCaptcha(frame) {
         const maxRetries = 3;
-        const retryDelay = 5000; // Delay between retries (in milliseconds)
-
         for (let attempt = 0; attempt < maxRetries; attempt++) {
             try {
-                // Click the CAPTCHA checkbox
                 await frame.click('div.recaptcha-checkbox-border');
                 console.log('Clicked the CAPTCHA checkbox');
-
-                // Wait for the checkbox checkmark to appear
                 const checkmarkVisible = await frame.locator('div.recaptcha-checkbox-checkmark[role="presentation"]').isVisible();
                 if (checkmarkVisible) {
-                    console.log('CAPTCHA checkbox successfully checked.');
-
-                    // Solve CAPTCHA using 2Captcha
+                    console.log('CAPTCHA checkbox checked');
                     console.log('Solving CAPTCHA...');
-                    await page.solveRecaptchas(); // Solve using external service like 2Captcha
+                    await page.solveRecaptchas(); // Solve with 2Captcha
                     console.log('CAPTCHA solved.');
 
-                    // Break out of the loop if solved successfully
+                    // Introduce a random delay before continuing to mimic human interaction
+                    const randomDelay = Math.random() * 3000 + 2000;
+                    await page.waitForTimeout(randomDelay);
+                    console.log(`Waited for ${randomDelay} ms before continuing.`);
                     return;
                 }
-
             } catch (error) {
-                console.error(`Error during CAPTCHA solving (Attempt ${attempt + 1}):`, error);
-
-                // Check for verification expired or invalid token messages
-                const expiredMessage = await frame.locator('span.rc-anchor-error-msg', { hasText: 'Verification challenge expired. Check the checkbox again.' }).isVisible();
-                const invalidTokenMessage = await page.locator('div.container-TCHLKPuQ.container-warning-TCHLKPuQ div.text-wrap-TCHLKPuQ span', { hasText: 'Invalid ReCaptcha token' }).isVisible();
-
-                if (expiredMessage || invalidTokenMessage) {
-                    console.log(`Error detected: ${expiredMessage ? 'Verification challenge expired' : 'Invalid ReCaptcha token'}, retrying... (Attempt ${attempt + 1} of ${maxRetries})`);
-                } else {
-                    // Re-throw other errors, so we don't retry for non-expired issues
-                    throw error;
+                console.error(`CAPTCHA solving failed (Attempt ${attempt + 1}/${maxRetries}):`, error);
+                const expiredMsgVisible = await frame.locator('span.rc-anchor-error-msg', { hasText: 'Verification challenge expired' }).isVisible();
+                if (expiredMsgVisible) {
+                    console.log(`Expired challenge on attempt ${attempt + 1}, retrying...`);
                 }
-
-                // Wait before retrying
-                if (attempt < maxRetries - 1) {
-                    console.log(`Waiting ${retryDelay / 1000} seconds before retrying...`);
-                    await page.waitForTimeout(retryDelay);
-                }
+                if (attempt < maxRetries - 1) await page.waitForTimeout(Math.random() * 3000 + 2000);
             }
         }
-
-        throw new Error('Failed to resolve CAPTCHA after maximum retries.');
+        throw new Error('Failed to solve CAPTCHA after maximum retries.');
     }
 
-    // Call the CAPTCHA handling function
     try {
         await handleCaptcha(frame);
     } catch (error) {
@@ -137,7 +95,7 @@ test('Automated TradingView Login and Interaction with CAPTCHA Handling and Scre
         return;
     }
 
-    // Click the "Sign In" button again after CAPTCHA is confirmed
+    // Attempt to log in after CAPTCHA resolution
     try {
         await page.click('button[data-overflow-tooltip-text="Sign in"]');
         console.log('Clicked Sign In after CAPTCHA solved.');
@@ -147,20 +105,18 @@ test('Automated TradingView Login and Interaction with CAPTCHA Handling and Scre
         return;
     }
 
-    // Check for "Invalid ReCaptcha token" or "Verification challenge expired" messages after CAPTCHA solution attempt
-    const isInvalidTokenVisible = await page.locator('div.container-TCHLKPuQ.container-warning-TCHLKPuQ div.text-wrap-TCHLKPuQ span', { hasText: 'Invalid ReCaptcha token' }).isVisible();
-    const isExpiredChallengeVisible = await page.locator('span.rc-anchor-error-msg', { hasText: 'Verification challenge expired. Check the checkbox again.' }).isVisible();
+    // Verify any errors post CAPTCHA resolution
+    const isInvalidTokenVisible = await page.locator('div.container-warning div.text-wrap span', { hasText: 'Invalid ReCaptcha token' }).isVisible();
+    const isExpiredChallengeVisible = await page.locator('span.rc-anchor-error-msg', { hasText: 'Verification challenge expired' }).isVisible();
 
     if (isInvalidTokenVisible) {
-        console.log('Error detected: Invalid ReCaptcha token.');
-        // Handle the invalid token error (e.g., retry login or show error to the user)
+        console.log('Error: Invalid ReCaptcha token.');
         await browser.close();
     } else if (isExpiredChallengeVisible) {
-        console.log('Error detected: Verification challenge expired.');
-        // Retry handling CAPTCHA
-        await handleCaptcha(frame);
+        console.log('Error: Verification challenge expired.');
+        await handleCaptcha(frame);  // Retry if challenge expired
     } else {
-        console.log('No CAPTCHA-related errors detected. Continuing with login process.');
+        console.log('Login successful.');
     }
 
     // Wait for the page to fully load (network idle)
@@ -172,9 +128,8 @@ test('Automated TradingView Login and Interaction with CAPTCHA Handling and Scre
     // Add a delay of 2 seconds before clicking
     await page.waitForTimeout(2000); // 2-second delay
 
-    // Click the search button by its aria-label
-    await page.locator('button.tv-header-search-container[aria-label="Search"]').click();
-
+    // Click the search button by its aria-label with fast execution
+    await page.locator('button.tv-header-search-container[aria-label="Search"]').click({ force: true });
 
     // Fill the search input with "OXTUSDT"
     await page.fill('input[placeholder="Symbol, eg. AAPL"]', 'OXTUSDT'); 
@@ -203,7 +158,7 @@ test('Automated TradingView Login and Interaction with CAPTCHA Handling and Scre
     await page.waitForLoadState('load');
 
     // Short delay to view the page after clicking the item
-    await page.waitForTimeout(5000);
+    await page.waitForTimeout(2000);
 
     // await page.pause();
 
@@ -424,7 +379,7 @@ test('Automated TradingView Login and Interaction with CAPTCHA Handling and Scre
     }
 
     // Final delay to view the page after all clicks
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(1000);
 
 
     // Start the loop to find and remove the second occurrence onwards
@@ -628,7 +583,7 @@ test('Automated TradingView Login and Interaction with CAPTCHA Handling and Scre
     }
 
     // Final delay to view the page after all actions
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(1000);
 
     // Start the loop to find and remove the second occurrence onwards
     let elementIndex2 = 1; // Start with the second occurrence for elements
@@ -866,7 +821,7 @@ test('Automated TradingView Login and Interaction with CAPTCHA Handling and Scre
     }
     
     // Final delay to view the page after all clicks
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(1000);
 
     await browser.close();
 });
