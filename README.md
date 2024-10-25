@@ -88,10 +88,14 @@ This will run all the test files located in the project's test directory.
 If you want to run a specific test file:
 ```bash
 <<<<<<< HEAD
+<<<<<<< HEAD
 npx playwright test <test-file-name> or npx playwright test ./Tests/Tradingview.spec.js --headed
 =======
 npx playwright test <test-file-name> or npx playwright test ./Tests/FinalnewTradingview.spec.js --headed
 >>>>>>> 1dfbae1 (Create README.md)
+=======
+npx playwright test <test-file-name> or npx playwright test ./Tests/Tradingview.spec.js --headed
+>>>>>>> 0ca6029 (Update README.md)
 ```
 
 You can also use various Playwright CLI options for test execution:
