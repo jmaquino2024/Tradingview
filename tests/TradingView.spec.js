@@ -22,7 +22,7 @@ test('Optimized CAPTCHA Handling with Automated TradingView Login', async () => 
     const downloadFolder = 'C:\\Users\\johnm\\pyth-playwright-project\\Screenshots';
     if (!fs.existsSync(downloadFolder)) fs.mkdirSync(downloadFolder, { recursive: true });
 
-    const browser = await chromium.launch({ headless: false });
+    const browser = await chromium.launch({ headless: true });
     const context = await browser.newContext();
     const page = await context.newPage();
 
