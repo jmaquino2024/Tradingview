@@ -22,7 +22,7 @@ test('Optimized CAPTCHA Handling with Automated TradingView Login', async () => 
     const downloadFolder = 'C:\\Users\\johnm\\pyth-playwright-project\\Screenshots';
     if (!fs.existsSync(downloadFolder)) fs.mkdirSync(downloadFolder, { recursive: true });
 
-    const browser = await chromium.launch({ headless: true });
+    const browser = await chromium.launch({ headless: false });
     const context = await browser.newContext();
     const page = await context.newPage();
 
@@ -158,7 +158,11 @@ test('Optimized CAPTCHA Handling with Automated TradingView Login', async () => 
     await page.waitForLoadState('load');
 
     // Short delay to view the page after clicking the item
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(1000);
+
+    const closeButtonSelector = '//div[contains(@class, "tv-dialog__close")]';
+
+    await page.isVisible(closeButtonSelector) && await page.click(closeButtonSelector);
 
     // await page.pause();
 
@@ -255,11 +259,14 @@ test('Optimized CAPTCHA Handling with Automated TradingView Login', async () => 
             // Short delay to ensure the item is processed
             await page.waitForTimeout(1000);
 
-            // await page.pause();
+            await page.pause();
 
             // Click on the legend source title
             await page.locator('[data-name="legend-source-title"]').nth(1).click();
-            await page.locator('button[aria-label="Settings"]').nth(0).click();
+            // Locate the button with the 'aria-label' of "Show interval settings"
+            await page.locator('button[aria-label="More"]').nth(1).click();
+
+            await page.click('//tr[contains(@class, "accessible-rm8yeqY4") and .//span[contains(text(), "Settings…")]]');
 
             // Check if we are in the "Inputs" tab before proceeding
             const inputsTab = page.locator('#inputs[role="tab"]');
@@ -314,7 +321,9 @@ test('Optimized CAPTCHA Handling with Automated TradingView Login', async () => 
 
             await page.locator('button[data-name="submit-button"]').click(); // Submit changes
             await page.locator('[data-name="legend-source-title"]').nth(2).click();
-            await page.locator('button[aria-label="Settings"]').nth(1).click();
+            await page.locator('button[aria-label="More"]').nth(2).click();
+
+            await page.click('//tr[contains(@class, "accessible-rm8yeqY4") and .//span[contains(text(), "Settings…")]]');
             
             // Click the style tab again and submit
             await page.locator('button[data-id="indicator-properties-dialog-tabs-style"]').click();
@@ -477,7 +486,10 @@ test('Optimized CAPTCHA Handling with Automated TradingView Login', async () => 
             await page.locator('[data-name="legend-source-title"]').nth(1).click();
 
             // Click settings and configure inputs
-            await page.locator('button[aria-label="Settings"]').nth(0).click();
+            await page.locator('button[aria-label="More"]').nth(1).click();
+
+            await page.click('//tr[contains(@class, "accessible-rm8yeqY4") and .//span[contains(text(), "Settings…")]]');
+
             // Locator for the "Inputs" tab button
             const inputsTab = page.locator('button[data-id="indicator-properties-dialog-tabs-inputs"]');
 
@@ -515,7 +527,9 @@ test('Optimized CAPTCHA Handling with Automated TradingView Login', async () => 
 
             // Configure another legend source title and settings
             await page.locator('[data-name="legend-source-title"]').nth(2).click();
-            await page.locator('button[aria-label="Settings"]').nth(1).click();
+            await page.locator('button[aria-label="More"]').nth(2).click();
+
+            await page.click('//tr[contains(@class, "accessible-rm8yeqY4") and .//span[contains(text(), "Settings…")]]');
 
             // Check if we are in the "Style" tab before proceeding
             const styleTab1 = page.locator('button[data-id="indicator-properties-dialog-tabs-style"]');
@@ -684,7 +698,9 @@ test('Optimized CAPTCHA Handling with Automated TradingView Login', async () => 
 
             // Click on the legend source title
             await page.locator('[data-name="legend-source-title"]').nth(1).click();
-            await page.locator('button[aria-label="Settings"]').nth(0).click();
+            await page.locator('button[aria-label="More"]').nth(1).click();
+
+            await page.click('//tr[contains(@class, "accessible-rm8yeqY4") and .//span[contains(text(), "Settings…")]]');
 
             // Check if we are in the "Inputs" tab before proceeding
             const inputsTab = page.locator('#inputs[role="tab"]');
@@ -756,7 +772,9 @@ test('Optimized CAPTCHA Handling with Automated TradingView Login', async () => 
 
             await page.locator('button[data-name="submit-button"]').click(); // Submit changes
             await page.locator('[data-name="legend-source-title"]').nth(2).click();
-            await page.locator('button[aria-label="Settings"]').nth(1).click();
+            await page.locator('button[aria-label="More"]').nth(2).click();
+
+            await page.click('//tr[contains(@class, "accessible-rm8yeqY4") and .//span[contains(text(), "Settings…")]]');
             
             // Click the style tab again and submit
             await page.locator('button[data-id="indicator-properties-dialog-tabs-style"]').click();
